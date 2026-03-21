@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>市場 - GameWallet 遊戲物品交易平台</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #f4f7fc;
+            color: #1e2f3a;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        /* 導航 */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #2b7a4b;
+        }
+        .logo span {
+            color: #f9c74f;
+        }
+        .nav-links a {
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: 500;
+            color: #1e4a3b;
+            transition: 0.2s;
+        }
+        .nav-links a:hover {
+            color: #f9c74f;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #2b7a4b;
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            color: #2b7a4b;
+            font-weight: 500;
+        }
+        .btn-primary {
+            background: #f9c74f;
+            border: none;
+            color: #1e4a3b;
+            font-weight: 600;
+            padding: 0.6rem 1.5rem;
+            border-radius: 2rem;
+            cursor: pointer;
+        }
+        /* 篩選欄 */
+        .filters {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+        .filter-group {
+            flex: 1;
+            min-width: 150px;
+        }
+        .filter-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        select, input {
+            width: 100%;
+            padding: 0.6rem;
+            border-radius: 1rem;
+            border: 1px solid #cbd5e1;
+        }
+        /* 物品卡片網格 */
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+        .item-card {
+            background: white;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        .item-card:hover {
+            transform: translateY(-5px);
+        }
+        .item-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            background: #eef2f0;
+        }
+        .item-info {
+            padding: 1rem;
+        }
+        .item-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .item-game {
+            font-size: 0.8rem;
+            color: #5f7f90;
+            margin: 0.3rem 0;
+        }
+        .item-price {
+            font-weight: 700;
+            color: #2b7a4b;
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+        .buy-btn {
+            background: #f9c74f;
+            border: none;
+            width: 100%;
+            padding: 0.6rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+        .empty-msg {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 1.5rem;
+        }
+        @media (max-width: 700px) {
+            .container {
+                padding: 1rem;
+            }
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .nav-links a {
+                margin-left: 0;
+                margin-right: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 導航欄 -->
+    <div class="navbar">
+        <div class="logo">Game<span>Wallet</span></div>
+        <div class="nav-links">
+            <a href="index.html">首頁</a>
+            <a href="marketplace.html" style="color:#f9c74f; font-weight:700;">市場</a>
+            <a href="#" id="dashboardLink">儀表板</a>
+            <a href="#" id="logoutLink">登出</a>
+        </div>
+    </div>
+
+    <!-- 篩選區 -->
+    <div class="filters">
+        <div class="filter-group">
+            <label>遊戲</label>
+            <select id="gameFilter">
+                <option value="all">全部遊戲</option>
+                <option value="CS2">Counter-Strike 2</option>
+                <option value="Dota2">Dota 2</option>
+                <option value="Rust">Rust</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>價格範圍 (USD)</label>
+            <div style="display: flex; gap: 0.5rem;">
+                <input type="number" id="minPrice" placeholder="最低" value="0">
+                <input type="number" id="maxPrice" placeholder="最高" value="1000">
+            </div>
+        </div>
+        <div class="filter-group">
+            <button id="applyFilterBtn" class="btn-primary">篩選</button>
+        </div>
+    </div>
+
+    <!-- 物品列表容器 -->
+    <div id="itemsContainer" class="items-grid">
+        <!-- 動態載入物品 -->
+        <div class="empty-msg">載入中...</div>
+    </div>
+</div>
+
+<script>
+    // ---------- 模擬物品資料庫 ----------
+    const items = [
+        { id: 1, name: "AK-47 | 火蛇 (Factory New)", game: "CS2", price: 125.50, image: "https://via.placeholder.com/300x160?text=AK47+FireSerpent", description: "經典傳奇皮膚" },
+        { id: 2, name: "M4A4 | 咆哮 (Minimal Wear)", game: "CS2", price: 89.90, image: "https://via.placeholder.com/300x160?text=M4A4+Howl", description: "稀有收藏品" },
+        { id: 3, name: "蝴蝶刀 | 都卜勒 (Phase 2)", game: "CS2", price: 450.00, image: "https://via.placeholder.com/300x160?text=Butterfly+Doppler", description: "高磨損度" },
+        { id: 4, name: "軍團戰旗 信使", game: "Dota2", price: 32.20, image: "https://via.placeholder.com/300x160?text=Dota2+Courier", description: "獨特特效" },
+        { id: 5, name: "Arctic Wolf 套裝", game: "Rust", price: 67.80, image: "https://via.placeholder.com/300x160?text=Rust+ArcticWolf", description: "限量版" },
+        { id: 6, name: "AWP | 二西莫夫 (Field-Tested)", game: "CS2", price: 210.00, image: "https://via.placeholder.com/300x160?text=AWP+Asiimov", description: "熱門外觀" },
+        { id: 7, name: "Dragonclaw Hook", game: "Dota2", price: 189.99, image: "https://via.placeholder.com/300x160?text=Dragonclaw+Hook", description: "經典鉤子" },
+        { id: 8, name: "Large Wooden Box Skin", game: "Rust", price: 15.40, image: "https://via.placeholder.com/300x160?text=Rust+WoodBox", description: "裝飾性外觀" }
+    ];
+
+    // 獲取當前登入用戶
+    function getCurrentUser() {
+        const userStr = localStorage.getItem('gamewallet_currentUser');
+        if (userStr) {
+            return JSON.parse(userStr);
+        }
+        return null;
+    }
+
+    // 渲染物品列表
+    function renderItems(filterGame = "all", minPrice = 0, maxPrice = 1000) {
+        const filtered = items.filter(item => {
+            if (filterGame !== "all" && item.game !== filterGame) return false;
+            if (item.price < minPrice || item.price > maxPrice) return false;
+            return true;
+        });
+
+        const container = document.getElementById('itemsContainer');
+        if (filtered.length === 0) {
+            container.innerHTML = '<div class="empty-msg">沒有找到符合條件的物品</div>';
+            return;
+        }
+
+        container.innerHTML = filtered.map(item => `
+            <div class="item-card" data-id="${item.id}">
+                <img class="item-img" src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/300x160?text=No+Image'">
+                <div class="item-info">
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-game"><i class="fas fa-gamepad"></i> ${item.game}</div>
+                    <div class="item-price">$${item.price.toFixed(2)} USD</div>
+                    <button class="buy-btn" data-id="${item.id}">立即購買</button>
+                </div>
+            </div>
+        `).join('');
+
+        // 為每個購買按鈕綁定事件
+        document.querySelectorAll('.buy-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const itemId = parseInt(btn.dataset.id);
+                const user = getCurrentUser();
+                if (!user) {
+                    alert('請先登入');
+                    window.location.href = 'index.html';
+                    return;
+                }
+                // 跳轉到交易頁面，帶入物品ID
+                window.location.href = `trade.html?id=${itemId}`;
+            });
+        });
+
+        // 點擊卡片本身也可以跳轉（方便用戶）
+        document.querySelectorAll('.item-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (e.target.classList.contains('buy-btn')) return;
+                const itemId = card.dataset.id;
+                window.location.href = `trade.html?id=${itemId}`;
+            });
+        });
+    }
+
+    // 檢查登入狀態並更新導航
+    function updateNav() {
+        const user = getCurrentUser();
+        const dashboardLink = document.getElementById('dashboardLink');
+        const logoutLink = document.getElementById('logoutLink');
+        if (user) {
+            dashboardLink.textContent = '儀表板';
+            dashboardLink.href = 'index.html';  // 儀表板目前在 index.html 中
+            logoutLink.textContent = '登出';
+            logoutLink.onclick = (e) => {
+                e.preventDefault();
+                localStorage.removeItem('gamewallet_currentUser');
+                alert('已登出');
+                window.location.href = 'index.html';
+            };
+        } else {
+            dashboardLink.textContent = '登入';
+            dashboardLink.href = 'index.html';
+            logoutLink.textContent = '';
+            logoutLink.style.display = 'none';
+        }
+    }
+
+    // 頁面加載時執行
+    document.addEventListener('DOMContentLoaded', () => {
+        updateNav();
+
+        // 初始渲染所有物品
+        renderItems();
+
+        // 篩選按鈕
+        document.getElementById('applyFilterBtn').addEventListener('click', () => {
+            const game = document.getElementById('gameFilter').value;
+            const min = parseFloat(document.getElementById('minPrice').value) || 0;
+            const max = parseFloat(document.getElementById('maxPrice').value) || 10000;
+            renderItems(game, min, max);
+        });
+    });
+</script>
+</body>
+</html>
