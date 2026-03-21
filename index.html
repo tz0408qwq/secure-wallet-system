@@ -18,7 +18,6 @@
             min-height: 100vh;
             color: #1e2f3a;
         }
-        /* 容器與卡片 */
         .container {
             max-width: 1300px;
             margin: 0 auto;
@@ -33,7 +32,6 @@
             margin-bottom: 2rem;
             transition: all 0.2s;
         }
-        /* 導航 */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -94,7 +92,6 @@
             border-radius: 2rem;
             cursor: pointer;
         }
-        /* 表單 */
         .form-group {
             margin-bottom: 1.2rem;
         }
@@ -146,7 +143,6 @@
             color: #f9c74f;
             margin-bottom: 1rem;
         }
-        /* 頁面切換 */
         .page {
             display: none;
         }
@@ -158,13 +154,24 @@
             font-size: 0.8rem;
             margin-top: 0.3rem;
         }
-        .success-msg {
-            color: #2b7a4b;
-        }
         .flex-between {
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+        .market-link {
+            color: white;
+            text-decoration: none;
+            background: rgba(249,199,79,0.2);
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            transition: 0.2s;
+            margin-right: 0.5rem;
+        }
+        .market-link:hover {
+            background: #f9c74f;
+            color: #1e4a3b;
         }
         @media (max-width: 700px) {
             .container {
@@ -178,11 +185,11 @@
 </head>
 <body>
 <div class="container">
-    <!-- 導航欄 -->
     <div class="navbar">
         <div class="logo">Game<span>Wallet</span></div>
-        <div class="nav-links" id="navLinks">
-            <!-- 動態顯示登入/登出按鈕 -->
+        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+            <a href="marketplace.html" class="market-link"><i class="fas fa-store"></i> 市場</a>
+            <div class="nav-links" id="navLinks"></div>
         </div>
     </div>
 
@@ -211,7 +218,6 @@
                 <button id="showLoginTab" class="btn-outline" style="flex:1; margin-right:0.5rem;">登入</button>
                 <button id="showRegisterTab" class="btn-outline" style="flex:1;">註冊</button>
             </div>
-            <!-- 登入表單 -->
             <div id="loginForm">
                 <div class="form-group">
                     <label>電子郵件</label>
@@ -224,7 +230,6 @@
                 <button id="doLoginBtn" class="btn-primary" style="width:100%;">登入</button>
                 <div id="loginError" class="error-msg" style="margin-top: 0.8rem;"></div>
             </div>
-            <!-- 註冊表單 -->
             <div id="registerForm" style="display:none;">
                 <div class="form-group">
                     <label>用戶名稱</label>
@@ -244,7 +249,7 @@
         </div>
     </div>
 
-    <!-- 頁面：儀表板 (簡單佔位，後續逐步完善) -->
+    <!-- 頁面：儀表板 -->
     <div id="dashboardPage" class="page">
         <div class="card">
             <h2>歡迎，<span id="userNameDisplay"></span>！</h2>
@@ -259,14 +264,12 @@
 </div>
 
 <script>
-    // ---------- 模擬資料庫 (localStorage) ----------
+    // ---------- 模擬資料庫 ----------
     let users = [];
     let currentUser = null;
 
-    // 初始化儲存
     function initStorage() {
         if (!localStorage.getItem('gamewallet_users')) {
-            // 預設一個測試用戶
             const defaultUsers = [
                 { id: '1', name: '測試玩家', email: 'test@example.com', password: '123456', wallet: 1250.00, bnplCredit: 500.00, kycLevel: 1, createdAt: Date.now() }
             ];
@@ -276,24 +279,20 @@
         const savedUser = localStorage.getItem('gamewallet_currentUser');
         if (savedUser) {
             currentUser = JSON.parse(savedUser);
-            // 確保用戶資料同步 (如餘額)
             const fresh = users.find(u => u.id === currentUser.id);
             if (fresh) currentUser = fresh;
         }
     }
 
-    // 儲存用戶列表
     function saveUsers() {
         localStorage.setItem('gamewallet_users', JSON.stringify(users));
     }
 
-    // 更新當前用戶會話
     function setCurrentUser(user) {
         currentUser = user;
         localStorage.setItem('gamewallet_currentUser', JSON.stringify(user));
     }
 
-    // 清除登入狀態
     function logout() {
         currentUser = null;
         localStorage.removeItem('gamewallet_currentUser');
@@ -301,7 +300,6 @@
         updateNav();
     }
 
-    // 顯示頁面
     function showPage(pageId) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
@@ -313,7 +311,6 @@
         updateNav();
     }
 
-    // 更新導航列按鈕
     function updateNav() {
         const navDiv = document.getElementById('navLinks');
         if (currentUser) {
@@ -327,7 +324,6 @@
         }
     }
 
-    // 切換登入/註冊標籤
     function switchTab(tab) {
         const loginDiv = document.getElementById('loginForm');
         const registerDiv = document.getElementById('registerForm');
@@ -350,7 +346,6 @@
         }
     }
 
-    // 註冊邏輯
     function register(name, email, password) {
         if (!name || !email || !password) return "請填寫所有欄位";
         if (users.find(u => u.email === email)) return "此電子郵件已被註冊";
@@ -360,7 +355,7 @@
             name: name,
             email: email,
             password: password,
-            wallet: 100.00,       // 新用戶贈送 100 測試金
+            wallet: 100.00,
             bnplCredit: 300.00,
             kycLevel: 0,
             createdAt: Date.now()
@@ -372,7 +367,6 @@
         return null;
     }
 
-    // 登入邏輯
     function login(email, password) {
         const user = users.find(u => u.email === email && u.password === password);
         if (!user) return "電子郵件或密碼錯誤";
@@ -381,22 +375,18 @@
         return null;
     }
 
-    // 事件綁定
     document.addEventListener('DOMContentLoaded', () => {
         initStorage();
         updateNav();
 
-        // 首頁按鈕
         document.getElementById('getStartedBtn')?.addEventListener('click', () => {
             if (currentUser) showPage('dashboardPage');
             else showPage('authPage');
         });
 
-        // 登入/註冊標籤
         document.getElementById('showLoginTab')?.addEventListener('click', () => switchTab('login'));
         document.getElementById('showRegisterTab')?.addEventListener('click', () => switchTab('register'));
 
-        // 登入動作
         document.getElementById('doLoginBtn')?.addEventListener('click', () => {
             const email = document.getElementById('loginEmail').value.trim();
             const pwd = document.getElementById('loginPassword').value;
@@ -404,7 +394,7 @@
             if (err) document.getElementById('loginError').innerText = err;
             else document.getElementById('loginError').innerText = '';
         });
-        // 註冊動作
+
         document.getElementById('doRegisterBtn')?.addEventListener('click', () => {
             const name = document.getElementById('regName').value.trim();
             const email = document.getElementById('regEmail').value.trim();
@@ -414,7 +404,6 @@
             else document.getElementById('regError').innerText = '';
         });
 
-        // 若已有登入狀態，預設顯示儀表板（可根據需求改為首頁）
         if (currentUser) {
             showPage('dashboardPage');
         } else {
@@ -424,4 +413,3 @@
 </script>
 </body>
 </html>
-  
