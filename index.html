@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安全數位錢包系統 · 初始架構與功能規格</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f4f7fc;
+            font-family: 'Inter', system-ui, sans-serif;
+            line-height: 1.5;
+            color: #1a2c3e;
+            padding: 2rem 1rem;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .card {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.05);
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #eef2f5;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            border-left: 5px solid #2b7a4b;
+            padding-left: 1rem;
+            color: #0f2c3d;
+        }
+        .section-sub {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 1.5rem 0 1rem 0;
+            color: #1f5e3a;
+        }
+        .badge {
+            background: #eef2fa;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #1f5e3a;
+            display: inline-block;
+        }
+        .arch-layer {
+            background: #f9fbfd;
+            border-radius: 20px;
+            margin-bottom: 1.2rem;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+        .layer-title {
+            background: #eaf3ee;
+            padding: 0.7rem 1.2rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #d4e2dc;
+            color: #1e4a3b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .layer-components {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1.2rem;
+        }
+        .comp-card {
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            padding: 0.8rem 1.2rem;
+            flex: 1 1 180px;
+            border: 1px solid #e2edf2;
+            font-weight: 500;
+        }
+        .comp-card i {
+            color: #2b7a4b;
+            margin-right: 8px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .feature-item {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 1.2rem 1.3rem;
+            border: 1px solid #e2edf2;
+        }
+        .feature-item h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #1c4e3c;
+        }
+        .feature-sub {
+            font-weight: 600;
+            margin: 0.6rem 0 0.2rem;
+            font-size: 0.85rem;
+            color: #4a6272;
+        }
+        .feature-desc {
+            font-size: 0.9rem;
+            color: #2c4a5e;
+            margin-bottom: 0.5rem;
+        }
+        .req-list {
+            font-size: 0.85rem;
+            padding-left: 1rem;
+            color: #3e5a6b;
+        }
+        .steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .step {
+            flex: 1;
+            min-width: 200px;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 1rem;
+            border-left: 4px solid #2b7a4b;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .step-number {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #2b7a4b;
+            margin-bottom: 0.4rem;
+        }
+        hr {
+            margin: 1rem 0;
+            border: 0;
+            height: 1px;
+            background: #e2edf2;
+        }
+        .footer-note {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #5f7f90;
+            border-top: 1px solid #dce5ea;
+            padding-top: 1.5rem;
+            margin-top: 1rem;
+        }
+        .student-meta {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            background: #eef3f0;
+            border-radius: 24px;
+            padding: 0.8rem 1.5rem;
+            margin-bottom: 1.8rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        @media (max-width: 700px) {
+            .card {
+                padding: 1.2rem;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="student-meta">
+        <span><i class="fas fa-user-graduate"></i> 姓名：Tang Shing Kai Frank | 學號：24633208</span>
+        <span><i class="far fa-calendar-alt"></i> 提交日期：2026年2月3日 (Job Log Period Week 1–3)</span>
+        <span><i class="fas fa-code-branch"></i> 系統版本：v1.0 / 2026年1月30日</span>
+    </div>
+
+    <div class="card">
+        <h1 style="font-size: 2rem; font-weight: 800;">🔐 安全數位錢包系統</h1>
+        <p style="font-size: 1.1rem; color: #2d6a4f; font-weight: 500;">Design of a Secure Digital Wallet System for In-Game Item Trading</p>
+        <p style="margin-top: 0.8rem;">基於遊戲物品交易市場的真實痛點：安全漏洞、資本鎖定、碎片化體驗。本系統以「合規先行、安全內建、流暢體驗」為核心。</p>
+        <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <span class="badge"><i class="fas fa-shield-alt"></i> 合規優先設計</span>
+            <span class="badge"><i class="fas fa-exchange-alt"></i> P2P 託管引擎</span>
+            <span class="badge"><i class="fas fa-credit-card"></i> BNPL 整合</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="section-title"><i class="fas fa-layer-group"></i> 高層級系統架構</div>
+        <div class="arch-layer"><div class="layer-title"><i class="fas fa-desktop"></i> 呈現層</div><div class="layer-components"><div class="comp-card"><i class="fas fa-globe"></i> 響應式網頁</div><div class="comp-card"><i class="fab fa-apple"></i> <i class="fab fa-android"></i> 行動 App</div></div></div>
+        <div class="arch-layer"><div class="layer-title"><i class="fas fa-exchange-alt"></i> API 閘道</div><div class="layer-components"><div class="comp-card"><i class="fas fa-tachometer-alt"></i> 認證與限流</div></div></div>
+        <div class="arch-layer"><div class="layer-title"><i class="fas fa-microchip"></i> 應用層 (微服務)</div><div class="layer-components"><div class="comp-card"><i class="fas fa-id-card"></i> 用戶＆錢包</div><div class="comp-card"><i class="fas fa-handshake"></i> P2P 交易引擎</div><div class="comp-card"><i class="fas fa-credit-card"></i> 支付閘道 (BNPL)</div><div class="comp-card"><i class="fas fa-shield-virus"></i> 安全與合規</div></div></div>
+        <div class="arch-layer"><div class="layer-title"><i class="fas fa-database"></i> 資料層</div><div class="layer-components"><div class="comp-card"><i class="fas fa-table"></i> PostgreSQL</div><div class="comp-card"><i class="fas fa-memory"></i> Redis</div></div></div>
+        <div class="arch-layer"><div class="layer-title"><i class="fas fa-plug"></i> 外部整合</div><div class="layer-components"><div class="comp-card"><i class="fab fa-steam"></i> 遊戲平台 API</div><div class="comp-card"><i class="fas fa-university"></i> Stripe/PayPal</div><div class="comp-card"><i class="fas fa-id-card"></i> KYC/AML</div></div></div>
+    </div>
+
+    <div class="card">
+        <div class="section-title"><i class="fas fa-list-check"></i> 核心功能規格</div>
+        <div class="feature-grid">
+            <div class="feature-item"><h3><i class="fas fa-user-lock"></i> 用戶認證 & 錢包</h3><div class="feature-sub">MFA、KYC 分級、儀表板</div><div class="feature-desc">支援 TOTP、SMS OTP，高額交易強制 MFA，完整 KYC 流程。</div><ul class="req-list"><li>✅ 多因素驗證</li><li>✅ 交易歷史查詢</li><li>✅ 錢包儀表板</li></ul></div>
+            <div class="feature-item"><h3><i class="fas fa-hand-holding-usd"></i> P2P 交易引擎 & 託管</h3><div class="feature-sub">安全交易視窗、第三方託管、遊戲 API 驗證</div><div class="feature-desc">買方資金鎖定於託管帳戶，賣方轉移物品後系統自動放款；糾紛時由平台介入仲裁。</div><ul class="req-list"><li>🔒 交易中顯示「託管保護」標籤</li><li>📡 透過 Steam / 對應遊戲 API 確認物品所有權變更</li><li>🤝 內建聲譽系統，降低詐騙風險</li></ul></div>
+            <div class="feature-item"><h3><i class="fas fa-coins"></i> 支付整合 & 先買後付 (BNPL)</h3><div class="feature-sub">法幣支付、規則型信用評估、彈性分期</div><div class="feature-desc">整合信用卡、本地轉帳，並提供 BNPL 選項。信用模型使用平台歷史（帳戶年齡、交易次數、成功率）作為代理變數，短期還款（14天）。</div><ul class="req-list"><li>📊 BNPL 合規審查中，初期以內部規則引擎運行</li><li>⚖️ 依用戶交易紀錄動態調整 BNPL 額度</li><li>⏰ 還款提醒通知，逾期則限制帳戶功能</li></ul></div>
+            <div class="feature-item"><h3><i class="fas fa-book"></i> 不可篡改交易總帳</h3><div class="feature-sub">稽核軌跡、完整金流日誌</div><div class="feature-desc">所有存款、提款、託管、BNPL 還款、手續費均以區塊鏈式日誌儲存，提供監管單位及使用者完整查證。</div><ul class="req-list"><li>📜 每筆記錄含時間戳、雙方 ID、金額、交易狀態</li><li>🔍 僅允許新增，無法刪改，滿足反洗錢要求</li><li>📎 支援匯出報表 (CSV/PDF) 供稅務用途</li></ul></div>
+        </div>
+        <div style="background: #f0f6f2; border-radius: 20px; padding: 1rem; margin-top: 1rem;">
+            <i class="fas fa-shield-haltered" style="color: #1f6e48;"></i> <strong>整合安全與合規服務模組</strong> — 即時行為分析、AI 詐欺偵測（基於市場分析報告中的信任缺口），自動標記可疑交易並強制 KYC 升級。
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="section-title"><i class="fas fa-diagram-project"></i> 關鍵業務流程 (P2P 交易 & BNPL)</div>
+        <div class="section-sub"><i class="fas fa-cart-shopping"></i> 物品交易 + 託管流程</div>
+        <div class="steps">
+            <div class="step"><span class="step-number">1.</span> 賣方上架物品 (經遊戲API驗證所有權)</div>
+            <div class="step"><span class="step-number">2.</span> 買方點擊「立即購買」</div>
+            <div class="step"><span class="step-number">3.</span> 系統凍結買方資金至託管帳戶</div>
+            <div class="step"><span class="step-number">4.</span> 賣方於遊戲內發送物品，系統輪詢 API 確認交付</div>
+            <div class="step"><span class="step-number">5.</span> 確認無誤後，資金自託管釋放至賣方錢包</div>
+            <div class="step"><span class="step-number">6.</span> 交易完成，雙方互評，總帳記錄</div>
+        </div>
+        <div class="section-sub" style="margin-top: 1.5rem;"><i class="fas fa-calendar-check"></i> BNPL (先買後付) 結帳流程</div>
+        <div class="steps">
+            <div class="step"><span class="step-number">①</span> 結帳時選擇「BNPL 先買後付」</div>
+            <div class="step"><span class="step-number">②</span> 規則引擎評估信用 (帳戶年齡>6個月、無違約紀錄、KYC Level≥2)</div>
+            <div class="step"><span class="step-number">③</span> 審核通過，BNPL 額度扣款，錢包立即獲得對應金額完成交易</div>
+            <div class="step"><span class="step-number">④</span> 產生還款計畫，推播通知提醒</div>
+            <div class="step"><span class="step-number">⑤</span> 用戶以錢包餘額還款，全額清償後恢復信用額度</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="section-title"><i class="fas fa-brain"></i> 設計思維 & 挑戰應對</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:1rem;">
+            <div style="background:#fff9ef; border-radius:1rem; padding:1rem;"><i class="fas fa-balance-scale"></i> <strong>安全與便利平衡</strong><br>高金額交易強 MFA，低金額簡化驗證，即時風控。</div>
+            <div style="background:#f1f7fc; border-radius:1rem; padding:1rem;"><i class="fas fa-chart-line"></i> <strong>BNPL 信用風險</strong><br>規則模型使用帳齡、交易成功率，逐步擴張並法律顧問。</div>
+            <div style="background:#fef3e8; border-radius:1rem; padding:1rem;"><i class="fas fa-globe"></i> <strong>跨區域合規</strong><br>可配置條款，支援不同地區稅務與 KYC，引入專家審閱。</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="section-title"><i class="fas fa-paperclip"></i> 對應專案文件</div>
+        <p><i class="fas fa-file-alt"></i> market_analysis.pdf · <i class="fas fa-file-pdf"></i> system_design_v1.pdf · <i class="fas fa-drafting-compass"></i> ui_wireframes.pdf (進行中)</p>
+        <div class="footer-note">本架構基於 FINT2103 Job Log Week 1–3 及市場分析報告，真實反映初始系統設計 v1.0。</div>
+    </div>
+</div>
+</body>
+</html>
