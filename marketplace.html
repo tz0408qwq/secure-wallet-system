@@ -174,7 +174,7 @@
         <div class="nav-links">
             <a href="index.html">首頁</a>
             <a href="marketplace.html" style="color:#f9c74f; font-weight:700;">市場</a>
-            <a href="#" id="dashboardLink">儀表板</a>
+            <a href="dashboard.html">儀表板</a>
             <a href="#" id="logoutLink">登出</a>
         </div>
     </div>
@@ -207,6 +207,7 @@
 </div>
 
 <script>
+    // 物品資料庫（請確認圖片檔名與路徑一致）
     const items = [
         { id: 1, name: "AK-47 | 火蛇 (Factory New)", game: "CS2", price: 125.50, image: "images/ak47_fireserpent.png", description: "經典傳奇皮膚" },
         { id: 2, name: "M4A4 | 咆哮 (Minimal Wear)", game: "CS2", price: 89.90, image: "images/m4a4_howl.png", description: "稀有收藏品" },
@@ -273,11 +274,8 @@
 
     function updateNav() {
         const user = getCurrentUser();
-        const dashboardLink = document.getElementById('dashboardLink');
         const logoutLink = document.getElementById('logoutLink');
         if (user) {
-            dashboardLink.textContent = '儀表板';
-            dashboardLink.href = 'index.html';
             logoutLink.textContent = '登出';
             logoutLink.onclick = (e) => {
                 e.preventDefault();
@@ -286,8 +284,6 @@
                 window.location.href = 'index.html';
             };
         } else {
-            dashboardLink.textContent = '登入';
-            dashboardLink.href = 'index.html';
             logoutLink.textContent = '';
             logoutLink.style.display = 'none';
         }
