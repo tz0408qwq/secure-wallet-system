@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>儀表板 - GameWallet 遊戲物品交易平台</title>
+    <title>交易 - GameWallet 遊戲物品交易平台</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -16,11 +16,10 @@
             font-family: 'Inter', system-ui, sans-serif;
             background: #f4f7fc;
             color: #1e2f3a;
-            padding-bottom: 2rem;
         }
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            max-width: 800px;
+            margin: 2rem auto;
             padding: 1.5rem;
         }
         .navbar {
@@ -53,130 +52,96 @@
         .nav-links a:hover {
             color: #f9c74f;
         }
+        .card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .item-detail {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        .item-img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 1rem;
+            background: #eef2f0;
+        }
+        .item-info {
+            flex: 1;
+        }
+        .item-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .item-game {
+            color: #5f7f90;
+            margin-bottom: 0.5rem;
+        }
+        .item-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #2b7a4b;
+            margin: 1rem 0;
+        }
+        .payment-options {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
         .btn-primary {
             background: #f9c74f;
             border: none;
             color: #1e4a3b;
             font-weight: 600;
-            padding: 0.6rem 1.2rem;
+            padding: 0.8rem 1.5rem;
             border-radius: 2rem;
             cursor: pointer;
+            font-size: 1rem;
             transition: 0.2s;
         }
         .btn-outline {
             background: transparent;
-            border: 1px solid #2b7a4b;
-            padding: 0.5rem 1.2rem;
+            border: 2px solid #f9c74f;
+            color: #1e4a3b;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
             border-radius: 2rem;
             cursor: pointer;
-            color: #2b7a4b;
-            font-weight: 500;
+            font-size: 1rem;
         }
-        .card {
-            background: white;
-            border-radius: 1.5rem;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        .wallet-card {
-            background: linear-gradient(135deg, #2b7a4b, #1e5a3a);
-            color: white;
-        }
-        .wallet-balance {
-            font-size: 2.5rem;
-            font-weight: 800;
-        }
-        .flex-between {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        .transaction-list {
-            max-height: 500px;
-            overflow-y: auto;
-        }
-        .transaction-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.8rem 0;
-            border-bottom: 1px solid #eef2f0;
-            flex-wrap: wrap;
-        }
-        .transaction-type {
-            font-weight: 600;
-        }
-        .transaction-amount {
-            font-weight: 700;
-        }
-        .transaction-date {
-            font-size: 0.8rem;
-            color: #5f7f90;
-        }
-        .positive {
-            color: #2b7a4b;
-        }
-        .negative {
-            color: #e07c4c;
-        }
-        .empty-msg {
-            text-align: center;
-            padding: 2rem;
-            color: #5f7f90;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background: white;
-            border-radius: 1.5rem;
-            padding: 2rem;
-            width: 90%;
-            max-width: 400px;
-        }
-        .modal-content input {
-            width: 100%;
+        .message {
+            margin-top: 1rem;
             padding: 0.8rem;
-            margin: 1rem 0;
-            border: 1px solid #cbd5e1;
             border-radius: 1rem;
+            text-align: center;
         }
-        .btn-group {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
+        .error {
+            background: #ffe6e6;
+            color: #c0392b;
         }
-        .repay-btn {
-            background: #f9c74f;
-            border: none;
-            padding: 0.3rem 0.8rem;
-            border-radius: 1rem;
-            cursor: pointer;
-            font-size: 0.8rem;
+        .success {
+            background: #e6f4ea;
+            color: #2b7a4b;
         }
         @media (max-width: 700px) {
             .container {
-                padding: 1rem;
+                margin: 1rem;
+                padding: 0.5rem;
             }
-            .navbar {
+            .item-detail {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: center;
+                text-align: center;
             }
-            .nav-links a {
-                margin-left: 0;
-                margin-right: 1rem;
+            .payment-options {
+                flex-direction: column;
             }
         }
     </style>
@@ -188,285 +153,172 @@
         <div class="nav-links">
             <a href="index.html">首頁</a>
             <a href="marketplace.html">市場</a>
-            <a href="dashboard.html" style="color:#f9c74f; font-weight:700;">儀表板</a>
+            <a href="dashboard.html">儀表板</a>
             <a href="#" id="logoutLink">登出</a>
         </div>
     </div>
 
-    <!-- 錢包資訊卡片 -->
-    <div class="card wallet-card">
-        <div class="flex-between">
-            <div>
-                <div style="opacity:0.8;">總資產 (USD)</div>
-                <div class="wallet-balance" id="walletBalance">0.00</div>
-            </div>
-            <div>
-                <div style="opacity:0.8;">可用 BNPL 額度</div>
-                <div class="wallet-balance" style="font-size:1.5rem;" id="bnplCredit">0.00</div>
-            </div>
-        </div>
-        <div class="flex-between" style="margin-top: 1.5rem;">
-            <button id="rechargeBtn" class="btn-primary"><i class="fas fa-plus-circle"></i> 充值</button>
-            <button id="withdrawBtn" class="btn-outline" style="background:white;"><i class="fas fa-minus-circle"></i> 提現</button>
-        </div>
-    </div>
-
-    <!-- 交易記錄 -->
-    <div class="card">
-        <div class="flex-between" style="margin-bottom: 1rem;">
-            <h2><i class="fas fa-history"></i> 交易記錄</h2>
-        </div>
-        <div id="transactionList" class="transaction-list">
-            <div class="empty-msg">載入中...</div>
-        </div>
-    </div>
-</div>
-
-<!-- 充值/提現彈窗 -->
-<div id="modal" class="modal">
-    <div class="modal-content">
-        <h3 id="modalTitle">充值</h3>
-        <input type="number" id="amountInput" placeholder="金額 (USD)" step="0.01">
-        <div class="btn-group">
-            <button id="modalConfirm" class="btn-primary">確認</button>
-            <button id="modalCancel" class="btn-outline">取消</button>
-        </div>
+    <div class="card" id="tradeCard">
+        <div style="text-align: center;">載入中...</div>
     </div>
 </div>
 
 <script>
-    // ---------- 共用函數 ----------
+    // ---------- 共用物品資料庫（與 marketplace.html 一致）----------
+    const items = [
+        { id: 1, name: "AK-47 | 火蛇 (Factory New)", game: "CS2", price: 125.50, image: "images/ak47_fireserpent.png", description: "經典傳奇皮膚" },
+        { id: 2, name: "M4A4 | 咆哮 (Minimal Wear)", game: "CS2", price: 89.90, image: "images/m4a4_howl.png", description: "稀有收藏品" },
+        { id: 3, name: "蝴蝶刀 | 都卜勒 (Phase 2)", game: "CS2", price: 450.00, image: "images/butterfly_doppler.png", description: "高磨損度" },
+        { id: 4, name: "軍團戰旗 信使", game: "Dota2", price: 32.20, image: "images/dota2_courier.jpg", description: "獨特特效" },
+        { id: 5, name: "Arctic Wolf 套裝", game: "Rust", price: 67.80, image: "images/rust_arcticwolf.png", description: "限量版" },
+        { id: 6, name: "AWP | 二西莫夫 (Field-Tested)", game: "CS2", price: 210.00, image: "images/awp_asimov.png", description: "熱門外觀" },
+        { id: 7, name: "Dragonclaw Hook", game: "Dota2", price: 189.99, image: "images/dragonclaw_hook.png", description: "經典鉤子" },
+        { id: 8, name: "Large Wooden Box Skin", game: "Rust", price: 15.40, image: "images/rust_woodbox.png", description: "裝飾性外觀" }
+    ];
+
+    // 輔助函數：獲取當前用戶
     function getCurrentUser() {
         const userStr = localStorage.getItem('gamewallet_currentUser');
         return userStr ? JSON.parse(userStr) : null;
     }
 
+    // 獲取所有用戶
     function getUsers() {
         return JSON.parse(localStorage.getItem('gamewallet_users')) || [];
     }
 
+    // 保存用戶列表
     function saveUsers(users) {
         localStorage.setItem('gamewallet_users', JSON.stringify(users));
     }
 
-    function getTransactions(userId) {
+    // 添加交易記錄 (與 dashboard 函數保持一致)
+    function addTransaction(userId, type, amount, status = 'completed', details = '') {
         const key = `transactions_${userId}`;
         const data = localStorage.getItem(key);
-        return data ? JSON.parse(data) : [];
-    }
-
-    function saveTransactions(userId, transactions) {
-        const key = `transactions_${userId}`;
-        localStorage.setItem(key, JSON.stringify(transactions));
-    }
-
-    function addTransaction(userId, type, amount, status = 'completed', details = '') {
-        const transactions = getTransactions(userId);
+        let transactions = data ? JSON.parse(data) : [];
         const newTransaction = {
             id: Date.now(),
-            type: type,
+            type: type, // 'recharge', 'withdraw', 'purchase', 'bnpl_purchase', 'bnpl_repayment'
             amount: amount,
             status: status,
             details: details,
             date: new Date().toISOString()
         };
         transactions.unshift(newTransaction);
-        saveTransactions(userId, transactions);
+        localStorage.setItem(key, JSON.stringify(transactions));
     }
 
-    // 更新用戶餘額（充值/提現）
-    function updateBalance(user, amount, isRecharge) {
+    // 更新用戶錢包（立即付款）
+    function purchaseWithBalance(user, item) {
         const users = getUsers();
         const index = users.findIndex(u => u.id === user.id);
         if (index === -1) return false;
-        if (isRecharge) {
-            users[index].wallet += amount;
-            addTransaction(user.id, 'recharge', amount, 'completed', `充值 ${amount} USD`);
-        } else {
-            if (users[index].wallet < amount) return false;
-            users[index].wallet -= amount;
-            addTransaction(user.id, 'withdraw', amount, 'completed', `提現 ${amount} USD`);
+
+        if (users[index].wallet < item.price) {
+            return { success: false, message: '錢包餘額不足，請先充值' };
         }
+
+        // 扣款
+        users[index].wallet -= item.price;
         saveUsers(users);
-        const updatedUser = users[index];
-        localStorage.setItem('gamewallet_currentUser', JSON.stringify(updatedUser));
-        return updatedUser;
+        // 更新 localStorage 中的 currentUser
+        localStorage.setItem('gamewallet_currentUser', JSON.stringify(users[index]));
+
+        // 記錄交易
+        addTransaction(user.id, 'purchase', item.price, 'completed', `購買 ${item.name} (${item.game})`);
+
+        return { success: true, message: `成功購買 ${item.name}！` };
     }
 
-    // BNPL 還款
-    function repayBNPL(user, transactionId, amount) {
+    // BNPL 購買（使用 BNPL 額度）
+    function purchaseWithBNPL(user, item) {
         const users = getUsers();
-        const userIndex = users.findIndex(u => u.id === user.id);
-        if (userIndex === -1) return false;
-        if (users[userIndex].wallet < amount) {
-            alert('錢包餘額不足，請先充值');
-            return false;
+        const index = users.findIndex(u => u.id === user.id);
+        if (index === -1) return false;
+
+        if (users[index].bnplCredit < item.price) {
+            return { success: false, message: 'BNPL 可用額度不足，請先還款或使用其他方式' };
         }
 
-        // 更新交易記錄的狀態
-        const transactions = getTransactions(user.id);
-        const txIndex = transactions.findIndex(tx => tx.id === transactionId);
-        if (txIndex === -1) return false;
-        if (transactions[txIndex].status === 'completed') {
-            alert('此筆借款已經還清');
-            return false;
-        }
-
-        // 扣錢，增加 BNPL 額度
-        users[userIndex].wallet -= amount;
-        users[userIndex].bnplCredit += amount;
+        // 扣除 BNPL 額度
+        users[index].bnplCredit -= item.price;
         saveUsers(users);
-        localStorage.setItem('gamewallet_currentUser', JSON.stringify(users[userIndex]));
+        localStorage.setItem('gamewallet_currentUser', JSON.stringify(users[index]));
 
-        // 更新該筆借款記錄的狀態
-        transactions[txIndex].status = 'completed';
-        saveTransactions(user.id, transactions);
+        // 記錄 BNPL 借款（記錄為 bnpl_purchase）
+        addTransaction(user.id, 'bnpl_purchase', item.price, 'pending', `BNPL 購買 ${item.name} (${item.game})，需於 14 天內還款`);
 
-        // 新增還款記錄
-        addTransaction(user.id, 'bnpl_repayment', amount, 'completed', `還款 BNPL 借款 $${amount} USD`);
-
-        return true;
+        return { success: true, message: `BNPL 購買成功！已使用額度 $${item.price} USD，請於 14 天內還款。` };
     }
 
-    // 渲染儀表板
-    function renderDashboard() {
+    // 渲染交易頁面
+    function renderTradePage() {
         const user = getCurrentUser();
         if (!user) {
             window.location.href = 'index.html';
             return;
         }
 
-        document.getElementById('walletBalance').innerText = user.wallet.toFixed(2);
-        document.getElementById('bnplCredit').innerText = user.bnplCredit.toFixed(2);
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = parseInt(urlParams.get('id'));
+        const item = items.find(i => i.id === itemId);
 
-        const transactions = getTransactions(user.id);
-        const container = document.getElementById('transactionList');
-        if (transactions.length === 0) {
-            container.innerHTML = '<div class="empty-msg">尚無交易記錄</div>';
+        if (!item) {
+            document.getElementById('tradeCard').innerHTML = `<div class="card" style="text-align:center;"><h2>物品不存在</h2><a href="marketplace.html" class="btn-primary">返回市場</a></div>`;
             return;
         }
 
-        container.innerHTML = transactions.map(tx => {
-            let typeIcon = '';
-            let amountClass = '';
-            let amountSign = '';
-            let repayButton = '';
-
-            if (tx.type === 'recharge') {
-                typeIcon = '<i class="fas fa-arrow-down" style="color:#2b7a4b;"></i>';
-                amountClass = 'positive';
-                amountSign = '+';
-            } else if (tx.type === 'withdraw') {
-                typeIcon = '<i class="fas fa-arrow-up" style="color:#e07c4c;"></i>';
-                amountClass = 'negative';
-                amountSign = '-';
-            } else if (tx.type === 'purchase') {
-                typeIcon = '<i class="fas fa-shopping-cart"></i>';
-                amountClass = 'negative';
-                amountSign = '-';
-            } else if (tx.type === 'bnpl_purchase') {
-                typeIcon = '<i class="fas fa-credit-card"></i>';
-                amountClass = 'negative';
-                amountSign = '-';
-                if (tx.status !== 'completed') {
-                    repayButton = `<button class="repay-btn" data-id="${tx.id}" data-amount="${tx.amount}">立即還款</button>`;
-                } else {
-                    repayButton = '<span style="font-size:0.7rem; color:green;">已還款</span>';
-                }
-            } else if (tx.type === 'bnpl_repayment') {
-                typeIcon = '<i class="fas fa-hand-holding-usd"></i>';
-                amountClass = 'negative';
-                amountSign = '-';
-            } else {
-                typeIcon = '<i class="fas fa-exchange-alt"></i>';
-                amountClass = '';
-                amountSign = '';
-            }
-
-            return `
-                <div class="transaction-item">
-                    <div style="flex:2;">
-                        <span class="transaction-type">${typeIcon} ${tx.type === 'recharge' ? '充值' : tx.type === 'withdraw' ? '提現' : tx.type === 'purchase' ? '購買物品' : tx.type === 'bnpl_purchase' ? 'BNPL 借款' : 'BNPL 還款'}</span>
-                        <div class="transaction-date">${new Date(tx.date).toLocaleString()}</div>
-                        ${tx.details ? `<div style="font-size:0.75rem; color:#5f7f90;">${tx.details}</div>` : ''}
+        const container = document.getElementById('tradeCard');
+        container.innerHTML = `
+            <div class="item-detail">
+                <img class="item-img" src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/200x200?text=圖片+載入失敗'">
+                <div class="item-info">
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-game"><i class="fas fa-gamepad"></i> ${item.game}</div>
+                    <div class="item-price">$${item.price.toFixed(2)} USD</div>
+                    <p>${item.description}</p>
+                    <div class="payment-options">
+                        <button id="payNowBtn" class="btn-primary"><i class="fas fa-wallet"></i> 立即付款</button>
+                        <button id="bnplBtn" class="btn-outline"><i class="fas fa-credit-card"></i> BNPL 先買後付</button>
                     </div>
-                    <div style="flex:1; text-align:right;">
-                        <div class="transaction-amount ${amountClass}">${amountSign}$${Math.abs(tx.amount).toFixed(2)} USD</div>
-                        ${repayButton ? `<div style="margin-top:0.3rem;">${repayButton}</div>` : ''}
-                    </div>
+                    <div id="messageArea" style="margin-top:1rem;"></div>
                 </div>
-            `;
-        }).join('');
+            </div>
+        `;
 
-        // 綁定還款按鈕事件
-        document.querySelectorAll('.repay-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const txId = parseInt(btn.dataset.id);
-                const amount = parseFloat(btn.dataset.amount);
-                if (confirm(`確認還款 $${amount.toFixed(2)} USD？`)) {
-                    const success = repayBNPL(user, txId, amount);
-                    if (success) {
-                        alert('還款成功！');
-                        renderDashboard(); // 刷新
-                    }
-                }
-            });
+        // 立即付款
+        document.getElementById('payNowBtn').addEventListener('click', () => {
+            const result = purchaseWithBalance(user, item);
+            const msgDiv = document.getElementById('messageArea');
+            msgDiv.innerHTML = `<div class="message ${result.success ? 'success' : 'error'}">${result.message}</div>`;
+            if (result.success) {
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 2000);
+            }
+        });
+
+        // BNPL 購買
+        document.getElementById('bnplBtn').addEventListener('click', () => {
+            const result = purchaseWithBNPL(user, item);
+            const msgDiv = document.getElementById('messageArea');
+            msgDiv.innerHTML = `<div class="message ${result.success ? 'success' : 'error'}">${result.message}</div>`;
+            if (result.success) {
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 2000);
+            }
         });
     }
 
-    // 充值/提現模態框
-    let currentAction = null;
-    function showModal(action) {
-        currentAction = action;
-        const modal = document.getElementById('modal');
-        const title = document.getElementById('modalTitle');
-        title.innerText = action === 'recharge' ? '充值' : '提現';
-        document.getElementById('amountInput').value = '';
-        modal.style.display = 'flex';
-    }
-    function closeModal() {
-        document.getElementById('modal').style.display = 'none';
-        currentAction = null;
-    }
-    function confirmModal() {
-        const amount = parseFloat(document.getElementById('amountInput').value);
-        if (isNaN(amount) || amount <= 0) {
-            alert('請輸入有效金額');
-            return;
-        }
-        const user = getCurrentUser();
-        if (!user) return;
-        if (currentAction === 'recharge') {
-            const updatedUser = updateBalance(user, amount, true);
-            if (updatedUser) {
-                alert(`成功充值 ${amount} USD`);
-                renderDashboard();
-            } else {
-                alert('充值失敗');
-            }
-        } else if (currentAction === 'withdraw') {
-            if (user.wallet < amount) {
-                alert('餘額不足');
-                closeModal();
-                return;
-            }
-            const updatedUser = updateBalance(user, amount, false);
-            if (updatedUser) {
-                alert(`成功提現 ${amount} USD`);
-                renderDashboard();
-            } else {
-                alert('提現失敗');
-            }
-        }
-        closeModal();
-    }
-
+    // 登出
     function logout() {
         localStorage.removeItem('gamewallet_currentUser');
         window.location.href = 'index.html';
     }
 
+    // 導航欄登出按鈕
     function updateNav() {
         const logoutLink = document.getElementById('logoutLink');
         if (logoutLink) {
@@ -479,16 +331,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         updateNav();
-        renderDashboard();
-
-        document.getElementById('rechargeBtn').addEventListener('click', () => showModal('recharge'));
-        document.getElementById('withdrawBtn').addEventListener('click', () => showModal('withdraw'));
-        document.getElementById('modalConfirm').addEventListener('click', confirmModal);
-        document.getElementById('modalCancel').addEventListener('click', closeModal);
-        window.onclick = (e) => {
-            const modal = document.getElementById('modal');
-            if (e.target === modal) closeModal();
-        };
+        renderTradePage();
     });
 </script>
 </body>
