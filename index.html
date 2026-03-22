@@ -249,11 +249,11 @@
         </div>
     </div>
 
-    <!-- 頁面：儀表板 -->
+    <!-- 頁面：簡單儀表板（保留作為備用，但主儀表板已獨立為 dashboard.html） -->
     <div id="dashboardPage" class="page">
         <div class="card">
             <h2>歡迎，<span id="userNameDisplay"></span>！</h2>
-            <p>這是您的個人錢包儀表板（後續將添加完整功能）</p>
+            <p>這是您的快速檢視面板。詳細功能請前往 <a href="dashboard.html">完整儀表板</a>。</p>
             <div style="margin-top: 1.5rem; background:#eef3f0; padding:1rem; border-radius:1rem;">
                 <p><strong>錢包餘額：</strong> <span id="walletBalance">0.00</span> USD</p>
                 <p><strong>BNPL 可用額度：</strong> <span id="bnplLimit">0.00</span> USD</p>
@@ -314,11 +314,13 @@
     function updateNav() {
         const navDiv = document.getElementById('navLinks');
         if (currentUser) {
-            navDiv.innerHTML = `<span style="color:white;">${currentUser.name}</span><button id="navDashboardBtn" class="nav-btn">儀表板</button><button id="navLogoutBtn" class="nav-btn">登出</button>`;
-            document.getElementById('navDashboardBtn')?.addEventListener('click', () => showPage('dashboardPage'));
+            navDiv.innerHTML = `<span style="color:white;">${currentUser.name}</span>
+                                 <a href="dashboard.html" style="color:white; text-decoration:none; background:rgba(255,255,255,0.2); padding:0.5rem 1.2rem; border-radius:2rem;">儀表板</a>
+                                 <button id="navLogoutBtn" class="nav-btn">登出</button>`;
             document.getElementById('navLogoutBtn')?.addEventListener('click', () => logout());
         } else {
-            navDiv.innerHTML = `<button id="navLoginBtn" class="nav-btn">登入</button><button id="navRegisterBtn" class="nav-btn">註冊</button>`;
+            navDiv.innerHTML = `<button id="navLoginBtn" class="nav-btn">登入</button>
+                                 <button id="navRegisterBtn" class="nav-btn">註冊</button>`;
             document.getElementById('navLoginBtn')?.addEventListener('click', () => { showPage('authPage'); switchTab('login'); });
             document.getElementById('navRegisterBtn')?.addEventListener('click', () => { showPage('authPage'); switchTab('register'); });
         }
