@@ -95,7 +95,7 @@
             gap: 1rem;
         }
         .transaction-list {
-            max-height: 400px;
+            max-height: 500px;
             overflow-y: auto;
         }
         .transaction-item {
@@ -104,6 +104,7 @@
             align-items: center;
             padding: 0.8rem 0;
             border-bottom: 1px solid #eef2f0;
+            flex-wrap: wrap;
         }
         .transaction-type {
             font-weight: 600;
@@ -156,6 +157,14 @@
             display: flex;
             gap: 1rem;
             justify-content: flex-end;
+        }
+        .repay-btn {
+            background: #f9c74f;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            font-size: 0.8rem;
         }
         @media (max-width: 700px) {
             .container {
@@ -226,84 +235,110 @@
 </div>
 
 <script>
-    // ---------- 輔助函數 ----------
+    // ---------- 共用函數 ----------
     function getCurrentUser() {
         const userStr = localStorage.getItem('gamewallet_currentUser');
         return userStr ? JSON.parse(userStr) : null;
-    }
-
-    function saveUsers(users) {
-        localStorage.setItem('gamewallet_users', JSON.stringify(users));
     }
 
     function getUsers() {
         return JSON.parse(localStorage.getItem('gamewallet_users')) || [];
     }
 
-    // 獲取指定用戶的交易記錄
+    function saveUsers(users) {
+        localStorage.setItem('gamewallet_users', JSON.stringify(users));
+    }
+
     function getTransactions(userId) {
         const key = `transactions_${userId}`;
         const data = localStorage.getItem(key);
         return data ? JSON.parse(data) : [];
     }
 
-    // 保存交易記錄
     function saveTransactions(userId, transactions) {
         const key = `transactions_${userId}`;
         localStorage.setItem(key, JSON.stringify(transactions));
     }
 
-    // 添加一筆交易記錄
     function addTransaction(userId, type, amount, status = 'completed', details = '') {
         const transactions = getTransactions(userId);
         const newTransaction = {
             id: Date.now(),
-            type: type,          // 'recharge', 'withdraw', 'purchase', 'bnpl_repayment'
+            type: type,
             amount: amount,
             status: status,
             details: details,
             date: new Date().toISOString()
         };
-        transactions.unshift(newTransaction); // 最新在最前
+        transactions.unshift(newTransaction);
         saveTransactions(userId, transactions);
-        return newTransaction;
     }
 
-    // 更新用戶餘額和 BNPL 額度（並記錄交易）
+    // 更新用戶餘額（充值/提現）
     function updateBalance(user, amount, isRecharge) {
         const users = getUsers();
         const index = users.findIndex(u => u.id === user.id);
         if (index === -1) return false;
-
         if (isRecharge) {
             users[index].wallet += amount;
             addTransaction(user.id, 'recharge', amount, 'completed', `充值 ${amount} USD`);
         } else {
-            if (users[index].wallet < amount) return false; // 餘額不足
+            if (users[index].wallet < amount) return false;
             users[index].wallet -= amount;
             addTransaction(user.id, 'withdraw', amount, 'completed', `提現 ${amount} USD`);
         }
         saveUsers(users);
-        // 更新當前用戶快取
         const updatedUser = users[index];
         localStorage.setItem('gamewallet_currentUser', JSON.stringify(updatedUser));
         return updatedUser;
+    }
+
+    // BNPL 還款
+    function repayBNPL(user, transactionId, amount) {
+        const users = getUsers();
+        const userIndex = users.findIndex(u => u.id === user.id);
+        if (userIndex === -1) return false;
+        if (users[userIndex].wallet < amount) {
+            alert('錢包餘額不足，請先充值');
+            return false;
+        }
+
+        // 更新交易記錄的狀態
+        const transactions = getTransactions(user.id);
+        const txIndex = transactions.findIndex(tx => tx.id === transactionId);
+        if (txIndex === -1) return false;
+        if (transactions[txIndex].status === 'completed') {
+            alert('此筆借款已經還清');
+            return false;
+        }
+
+        // 扣錢，增加 BNPL 額度
+        users[userIndex].wallet -= amount;
+        users[userIndex].bnplCredit += amount;
+        saveUsers(users);
+        localStorage.setItem('gamewallet_currentUser', JSON.stringify(users[userIndex]));
+
+        // 更新該筆借款記錄的狀態
+        transactions[txIndex].status = 'completed';
+        saveTransactions(user.id, transactions);
+
+        // 新增還款記錄
+        addTransaction(user.id, 'bnpl_repayment', amount, 'completed', `還款 BNPL 借款 $${amount} USD`);
+
+        return true;
     }
 
     // 渲染儀表板
     function renderDashboard() {
         const user = getCurrentUser();
         if (!user) {
-            alert('請先登入');
             window.location.href = 'index.html';
             return;
         }
 
-        // 顯示餘額和 BNPL
         document.getElementById('walletBalance').innerText = user.wallet.toFixed(2);
         document.getElementById('bnplCredit').innerText = user.bnplCredit.toFixed(2);
 
-        // 顯示交易記錄
         const transactions = getTransactions(user.id);
         const container = document.getElementById('transactionList');
         if (transactions.length === 0) {
@@ -315,6 +350,8 @@
             let typeIcon = '';
             let amountClass = '';
             let amountSign = '';
+            let repayButton = '';
+
             if (tx.type === 'recharge') {
                 typeIcon = '<i class="fas fa-arrow-down" style="color:#2b7a4b;"></i>';
                 amountClass = 'positive';
@@ -327,8 +364,17 @@
                 typeIcon = '<i class="fas fa-shopping-cart"></i>';
                 amountClass = 'negative';
                 amountSign = '-';
-            } else if (tx.type === 'bnpl_repayment') {
+            } else if (tx.type === 'bnpl_purchase') {
                 typeIcon = '<i class="fas fa-credit-card"></i>';
+                amountClass = 'negative';
+                amountSign = '-';
+                if (tx.status !== 'completed') {
+                    repayButton = `<button class="repay-btn" data-id="${tx.id}" data-amount="${tx.amount}">立即還款</button>`;
+                } else {
+                    repayButton = '<span style="font-size:0.7rem; color:green;">已還款</span>';
+                }
+            } else if (tx.type === 'bnpl_repayment') {
+                typeIcon = '<i class="fas fa-hand-holding-usd"></i>';
                 amountClass = 'negative';
                 amountSign = '-';
             } else {
@@ -336,21 +382,41 @@
                 amountClass = '';
                 amountSign = '';
             }
+
             return `
                 <div class="transaction-item">
-                    <div>
-                        <span class="transaction-type">${typeIcon} ${tx.type === 'recharge' ? '充值' : tx.type === 'withdraw' ? '提現' : tx.type === 'purchase' ? '購買物品' : 'BNPL 還款'}</span>
+                    <div style="flex:2;">
+                        <span class="transaction-type">${typeIcon} ${tx.type === 'recharge' ? '充值' : tx.type === 'withdraw' ? '提現' : tx.type === 'purchase' ? '購買物品' : tx.type === 'bnpl_purchase' ? 'BNPL 借款' : 'BNPL 還款'}</span>
                         <div class="transaction-date">${new Date(tx.date).toLocaleString()}</div>
                         ${tx.details ? `<div style="font-size:0.75rem; color:#5f7f90;">${tx.details}</div>` : ''}
                     </div>
-                    <div class="transaction-amount ${amountClass}">${amountSign}$${Math.abs(tx.amount).toFixed(2)} USD</div>
+                    <div style="flex:1; text-align:right;">
+                        <div class="transaction-amount ${amountClass}">${amountSign}$${Math.abs(tx.amount).toFixed(2)} USD</div>
+                        ${repayButton ? `<div style="margin-top:0.3rem;">${repayButton}</div>` : ''}
+                    </div>
                 </div>
             `;
         }).join('');
+
+        // 綁定還款按鈕事件
+        document.querySelectorAll('.repay-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const txId = parseInt(btn.dataset.id);
+                const amount = parseFloat(btn.dataset.amount);
+                if (confirm(`確認還款 $${amount.toFixed(2)} USD？`)) {
+                    const success = repayBNPL(user, txId, amount);
+                    if (success) {
+                        alert('還款成功！');
+                        renderDashboard(); // 刷新
+                    }
+                }
+            });
+        });
     }
 
-    // 充值/提現模態框邏輯
-    let currentAction = null; // 'recharge' or 'withdraw'
+    // 充值/提現模態框
+    let currentAction = null;
     function showModal(action) {
         currentAction = action;
         const modal = document.getElementById('modal');
@@ -359,12 +425,10 @@
         document.getElementById('amountInput').value = '';
         modal.style.display = 'flex';
     }
-
     function closeModal() {
         document.getElementById('modal').style.display = 'none';
         currentAction = null;
     }
-
     function confirmModal() {
         const amount = parseFloat(document.getElementById('amountInput').value);
         if (isNaN(amount) || amount <= 0) {
@@ -373,12 +437,11 @@
         }
         const user = getCurrentUser();
         if (!user) return;
-
         if (currentAction === 'recharge') {
             const updatedUser = updateBalance(user, amount, true);
             if (updatedUser) {
                 alert(`成功充值 ${amount} USD`);
-                renderDashboard(); // 重新整理
+                renderDashboard();
             } else {
                 alert('充值失敗');
             }
@@ -399,13 +462,11 @@
         closeModal();
     }
 
-    // 登出
     function logout() {
         localStorage.removeItem('gamewallet_currentUser');
         window.location.href = 'index.html';
     }
 
-    // 導航欄登出按鈕
     function updateNav() {
         const logoutLink = document.getElementById('logoutLink');
         if (logoutLink) {
@@ -416,17 +477,14 @@
         }
     }
 
-    // 頁面加載
     document.addEventListener('DOMContentLoaded', () => {
         updateNav();
         renderDashboard();
 
-        // 綁定按鈕事件
         document.getElementById('rechargeBtn').addEventListener('click', () => showModal('recharge'));
         document.getElementById('withdrawBtn').addEventListener('click', () => showModal('withdraw'));
         document.getElementById('modalConfirm').addEventListener('click', confirmModal);
         document.getElementById('modalCancel').addEventListener('click', closeModal);
-        // 點擊背景關閉
         window.onclick = (e) => {
             const modal = document.getElementById('modal');
             if (e.target === modal) closeModal();
